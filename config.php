@@ -1,33 +1,21 @@
 <?php
 class Config {
     public static function getPDO() {
-        // SEMPRE usar o banco do JawsDB quando JAWSDB_URL existir
-        $jawsdb_url = getenv("JAWSDB_URL");
+        // CONEXÃO SIMPLES E DIRETA
+        $host = 'qf5dic2wzyjf1x5x.cbetxkdyhwsb.us-east-1.rds.amazonaws.com';
+        $dbname = 'ayoejwl46jt74b86';
+        $username = 'iu3kw1zuhvu4jz3z';
+        $password = 'ik7r445n7y4kn34b';
+        $port = 3306;
         
-        if ($jawsdb_url) {
-            // PRODUÇÃO - Heroku + JawsDB
-            $url = parse_url($jawsdb_url);
-            $host = $url["host"];
-            $dbname = substr($url["path"], 1); // ayoejwl46jt74b86
-            $username = $url["user"];
-            $password = $url["pass"];
-            
-            $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
-        } else {
-            // DESENVOLVIMENTO - Local
-            $host = 'localhost';
-            $dbname = 'cafe_db';
-            $username = 'root';
-            $password = '';
-            $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
-        }
+        $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8";
         
         try {
             $pdo = new PDO($dsn, $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $pdo;
         } catch (PDOException $e) {
-            die("Erro no banco de dados: " . $e->getMessage());
+            die("Erro de conexão: " . $e->getMessage());
         }
     }
 }
