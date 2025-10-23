@@ -1,28 +1,37 @@
 <?php
 class Config {
     public static function getPDO() {
-        // Configuração para Heroku + JawsDB
-        if (getenv("JAWSDB_URL")) {
-            // Produção no Heroku
-            $url = parse_url(getenv("JAWSDB_URL"));
+        // Verificar se estamos no Heroku com JawsDB
+        $jawsdb_url = getenv("JAWSDB_URL");
+        
+        if ($jawsdb_url) {
+            // PRODUÇÃO (Heroku + JawsDB) - USA O BANCO DO JAWSDB
+            $url = parse_url($jawsdb_url);
             $host = $url["host"];
-            $db   = substr($url["path"], 1);
-            $user = $url["user"]; 
-            $pass = $url["pass"];
+            $dbname = substr($url["path"], 1); // Isso pega 'ayoejwl46jt74b86'
+            $username = $url["user"];
+            $password = $url["pass"];
+            $port = isset($url["port"]) ? $url["port"] : 3306;
+            
+            $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8";
         } else {
-            // Desenvolvimento local
+            // DESENVOLVIMENTO (Local) - USA cafe_db
             $host = 'localhost';
-            $db   = 'cafe_db';
-            $user = 'root';
-            $pass = '';
+            $dbname = 'cafe_db';
+            $username = 'root';
+            $password = '';
+            $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
         }
         
         try {
-            $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+            $pdo = new PDO($dsn, $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             return $pdo;
         } catch (PDOException $e) {
-            die("Erro na conexão com o banco: " . $e->getMessage());
+            $error_msg = "Erro na conexão com o banco: " . $e->getMessage();
+            $error_msg .= " | Database: " . $dbname;
+            die($error_msg);
         }
     }
 }
