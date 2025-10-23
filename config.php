@@ -1,20 +1,24 @@
 <?php
-// Arquivo: config.php
-// Configurações do banco de dados Café Gourmet
-
 class Config {
-    const DB_HOST = 'localhost';
-    const DB_NAME = 'cafe_db';
-    const DB_USER = 'root';
-    const DB_PASS = ''; // Deixe vazio se não tiver senha
-    
     public static function getPDO() {
+        // Configuração para Heroku + JawsDB
+        if (getenv("JAWSDB_URL")) {
+            // Produção no Heroku
+            $url = parse_url(getenv("JAWSDB_URL"));
+            $host = $url["host"];
+            $db   = substr($url["path"], 1);
+            $user = $url["user"]; 
+            $pass = $url["pass"];
+        } else {
+            // Desenvolvimento local
+            $host = 'localhost';
+            $db   = 'cafe_db';
+            $user = 'root';
+            $pass = '';
+        }
+        
         try {
-            $pdo = new PDO(
-                'mysql:host=' . self::DB_HOST . ';dbname=' . self::DB_NAME . ';charset=utf8',
-                self::DB_USER,
-                self::DB_PASS
-            );
+            $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $pdo;
         } catch (PDOException $e) {

@@ -1,0 +1,9 @@
+{
+    "name": "menezes23/cafe-gourmet",
+    "description": "Sistema de e-commerce para cafés especiais",
+    "type": "project",
+    "require": {
+        "php": "^7.4",
+        "ext-pdo": "*"
+    }
+}
