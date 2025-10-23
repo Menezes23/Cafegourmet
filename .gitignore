@@ -1,0 +1,47 @@
+# ARQUIVO: .gitignore
+# Arquivos que NÃO devem ir para o GitHub
+
+# Configurações sensíveis
+config.local.php
+.env
+*.env
+
+# Logs do sistema
+*.log
+error_log
+logs/
+
+# Backup de banco de dados
+*.sql
+*.bak
+backup/
+database_backup/
+
+# Arquivos de sessão PHP
+sess_*
+session_*
+tmp/sessions/
+
+# Cache
+cache/
+tmp/cache/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE/Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# Uploads de usuários (se tiver)
+uploads/
+temp/
+
+# Arquivos temporários
+tmp/
+temp/
